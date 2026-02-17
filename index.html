@@ -254,7 +254,7 @@
           <h2 class="font-display text-2xl font-bold accent-deep mb-4">⚙️ Settings</h2>
           <div class="mb-6 flex flex-wrap gap-2 items-center">
             <span id="connection-status" class="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700">⏳ Connecting…</span>
-            <span class="text-xs text-gray-600">Ready to go!</span>
+            <span class="text-xs text-gray-600">If buttons don’t work, check Firebase Auth + Firestore Rules.</span>
           </div>
 
 
@@ -1139,7 +1139,7 @@ function renderTastingResultsPage() {
       ratedWines.forEach((w, i) => {
         const rank = i + 1;
         const medal = rank <= 3 ? medals[rank - 1] : '';
-        const respondedText = `${w.tasted_count} av ${w.total_participants} har svarat`;
+        const respondedText = `${w.tasted_count} of ${w.total_participants} have responded`;
 
         html += `
           <div class="bg-white rounded-lg p-4 mb-3 border border-gray-200">
@@ -1243,7 +1243,7 @@ function renderTastingResultsPage() {
       const btn = evt.target;
       if (reveal.classList.contains("hidden")) {
         reveal.classList.remove("hidden");
-        btn.textContent = "🎭 Dölj Vinen";
+        btn.textContent = "🎭 Hide wines";
         renderWineReveal();
       } else {
         reveal.classList.add("hidden");
