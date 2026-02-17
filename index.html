@@ -1089,14 +1089,14 @@ function renderTastingResultsPage() {
       }
 
       // Avg rating per wine
-      const winesByOverall rating = {};
+      const winesByRating = {};
       tastings.forEach(t => {
-        if (!winesByOverall rating[t.wine_number]) winesByOverall rating[t.wine_number] = { total: 0, count: 0 };
-        winesByOverall rating[t.wine_number].total += Number(t.rating || 0);
-        winesByOverall rating[t.wine_number].count += 1;
+        if (!winesByRating[t.wine_number]) winesByRating[t.wine_number] = { total: 0, count: 0 };
+        winesByRating[t.wine_number].total += Number(t.rating || 0);
+        winesByRating[t.wine_number].count += 1;
       });
 
-      const ratedWines = Object.entries(winesByOverall rating)
+      const ratedWines = Object.entries(winesByRating)
         .map(([wineNum, data]) => {
           const wine = wines.find(w => String(w.wine_number) === String(wineNum));
           const avg = data.count ? (data.total / data.count) : 0;
