@@ -361,7 +361,7 @@
             <hr class="my-4">
 
             <div>
-              <label class="block text-xs font-semibold accent-deep mb-2">Aroma (how strong is the smell?)</label>
+              <label class="block text-xs font-semibold accent-deep mb-2">Aroma (smell)</label>
               <div class="flex gap-2">
                 <button type="button" class="option-btn flex-1" onclick="selectTastingOption('aroma','Low', event)">Low</button>
                 <button type="button" class="option-btn flex-1" onclick="selectTastingOption('aroma','Medium', event)">Medium</button>
@@ -1070,10 +1070,10 @@ try {
       analysis.driest   = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.sweetness,'Dry'); if(c>bc){bc=c;w=n}});return w;})();
       analysis.fullest  = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.body,'Full-bodied'); if(c>bc){bc=c;w=n}});return w;})();
       analysis.lightest = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.body,'Light'); if(c>bc){bc=c;w=n}});return w;})();
-      analysis.mostAroma (how strong is the smell?)= (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.aroma,'High'); if(c>bc){bc=c;w=n}});return w;})();
-      analysis.leastAroma (how strong is the smell?)=(()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.aroma,'Low'); if(c>bc){bc=c;w=n}});return w;})();
-      analysis.mostAcidity (freshness)=(()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.acidity,'High'); if(c>bc){bc=c;w=n}});return w;})();
-      analysis.leastAcidity (freshness)=(()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.acidity,'Low'); if(c>bc){bc=c;w=n}});return w;})();
+      analysis.mostAroma = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.aroma,'High'); if(c>bc){bc=c;w=n}});return w;})();
+      analysis.leastAroma = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.aroma,'Low'); if(c>bc){bc=c;w=n}});return w;})();
+      analysis.mostAcidity = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.acidity,'High'); if(c>bc){bc=c;w=n}});return w;})();
+      analysis.leastAcidity = (()=>{let w=null,bc=-1;Object.entries(perWine).forEach(([n,d])=>{const c=count(d.acidity,'Low'); if(c>bc){bc=c;w=n}});return w;})();
       return analysis;
     }
 
@@ -1197,14 +1197,14 @@ function renderTastingResultsPage() {
       html += '<hr class="my-8">';
       html += '<div><h3 class="font-display text-xl font-bold accent-deep mb-4">📊 Wine analysis</h3>';
       html += '<div class="space-y-2">';
-      if (analysis.sweetest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍬 Sweetaste:</span> Wine ${escapeHtml(String(analysis.sweetest))}</div>`;
-      if (analysis.driest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍃 Dryaste:</span> Wine ${escapeHtml(String(analysis.driest))}</div>`;
-      if (analysis.fullest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">💪 Full-bodiedaste:</span> Wine ${escapeHtml(String(analysis.fullest))}</div>`;
-      if (analysis.lightest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">☁️ Lightaste:</span> Wine ${escapeHtml(String(analysis.lightest))}</div>`;
-      if (analysis.mostAroma (how strong is the smell?)) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">👃 Most aroma:</span> Wine ${escapeHtml(String(analysis.mostAroma (how strong is the smell?)))}</div>`;
-      if (analysis.leastAroma (how strong is the smell?)) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">😶 Least aroma:</span> Wine ${escapeHtml(String(analysis.leastAroma (how strong is the smell?)))}</div>`;
-      if (analysis.mostAcidity (freshness)) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍋 Highst syra:</span> Wine ${escapeHtml(String(analysis.mostAcidity (freshness)))}</div>`;
-      if (analysis.leastAcidity (freshness)) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🥛 Lowest acidity:</span> Wine ${escapeHtml(String(analysis.leastAcidity (freshness)))}</div>`;
+      if (analysis.sweetest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍬 Sweetest:</span> Wine ${escapeHtml(String(analysis.sweetest))}</div>`;
+      if (analysis.driest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍃 Driest:</span> Wine ${escapeHtml(String(analysis.driest))}</div>`;
+      if (analysis.fullest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">💪 Fullest body:</span> Wine ${escapeHtml(String(analysis.fullest))}</div>`;
+      if (analysis.lightest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">☁️ Lightest body:</span> Wine ${escapeHtml(String(analysis.lightest))}</div>`;
+      if (analysis.mostAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">👃 Most aroma:</span> Wine ${escapeHtml(String(analysis.mostAroma))}</div>`;
+      if (analysis.leastAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">😶 Least aroma:</span> Wine ${escapeHtml(String(analysis.leastAroma))}</div>`;
+      if (analysis.mostAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍋 Highest acidity:</span> Wine ${escapeHtml(String(analysis.mostAcidity))}</div>`;
+      if (analysis.leastAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🥛 Lowest acidity:</span> Wine ${escapeHtml(String(analysis.leastAcidity))}</div>`;
       html += '</div></div>';
 
       container.innerHTML = html;
