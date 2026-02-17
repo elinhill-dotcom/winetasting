@@ -510,6 +510,58 @@
     const COUNTRIES = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica", "C\u00f4te d\u2019Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
     const COUNTRY_SET = new Set(COUNTRIES.map(c => c.toLowerCase()));
 
+
+// Accept common aliases (and some Swedish names) and normalize to the canonical country name.
+const COUNTRY_CANON = new Map(COUNTRIES.map(c => [c.toLowerCase(), c]));
+const COUNTRY_ALIASES = new Map(Object.entries({
+  // Common English aliases
+  "usa": "United States",
+  "u.s.a.": "United States",
+  "us": "United States",
+  "u.s.": "United States",
+  "uk": "United Kingdom",
+  "u.k.": "United Kingdom",
+  "england": "United Kingdom",
+  "scotland": "United Kingdom",
+  "wales": "United Kingdom",
+  "czech republic": "Czechia",
+  "ivory coast": "Côte d’Ivoire",
+  "cote d'ivoire": "Côte d’Ivoire",
+  "cote d’ivoire": "Côte d’Ivoire",
+  "south korea": "South Korea",
+  "north korea": "North Korea",
+  "uae": "United Arab Emirates",
+
+  // Swedish -> English (helpful if people type in Swedish)
+  "frankrike": "France",
+  "italien": "Italy",
+  "spanien": "Spain",
+  "tyskland": "Germany",
+  "österrike": "Austria",
+  "portugal": "Portugal",
+  "grekland": "Greece",
+  "ungern": "Hungary",
+  "sydafrika": "South Africa",
+  "argentina": "Argentina",
+  "chile": "Chile",
+  "australien": "Australia",
+  "nya zeeland": "New Zealand",
+  "nyazeeland": "New Zealand",
+  "usa": "United States",
+  "sverige": "Sweden"
+}));
+
+function normalizeCountryInput(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  const key = s.toLowerCase();
+  const aliased = COUNTRY_ALIASES.get(key);
+  const candidate = (aliased || s).trim();
+  const canon = COUNTRY_CANON.get(candidate.toLowerCase());
+  return canon || "";
+}
+
+
     const DEFAULT_QUESTIONS = [
   {
     id: 1,
@@ -779,10 +831,12 @@
         country: document.getElementById("wine-country").value.trim(),
       };
       // Validate country (avoid typos)
-      if (payload.country && !COUNTRY_SET.has(payload.country.toLowerCase())) {
-        showToast("Please choose a country from the list (to avoid spelling mistakes).", "error");
+      const normalizedCountry = normalizeCountryInput(payload.country);
+      if (payload.country && !normalizedCountry) {
+        showToast("Please pick a country from the list (e.g. France, Italy). You can also type USA/UK.", "error");
         return;
       }
+      if (normalizedCountry) payload.country = normalizedCountry;
 
       try {
         await createItem(payload);
@@ -884,8 +938,9 @@
       }
       // Validate guessed country (avoid typos)
 const guessedCountry = document.getElementById("tasting-guess-country").value.trim();
-if (guessedCountry && !COUNTRY_SET.has(guessedCountry.toLowerCase())) {
-  showToast("Please pick a country from the list (so spelling is consistent).", "error");
+const normalizedGuess = normalizeCountryInput(guessedCountry);
+            if (guessedCountry && !normalizedGuess) {
+  showToast("Please pick a country from the list (you can also type USA/UK).", "error");
   return;
 }
 try {
@@ -893,7 +948,7 @@ try {
           type: "tasting",
           participant_name: currentParticipant,
           wine_number: currentWine.wine_number,
-          guess_country: document.getElementById("tasting-guess-country").value.trim(),
+          guess_country: (normalizedGuess || document.getElementById("tasting-guess-country").value.trim()),
           guess_grape: document.getElementById("tasting-guess-grape").value.trim(),
           guess_price: String(document.getElementById("tasting-guess-price").value).trim(),
           aroma: tastingData.aroma,
@@ -1473,6 +1528,23 @@ window.saveQuizQuestions = async function() {
 
       // 3) Start realtime listeners AFTER auth is ready (avoids permission-denied race)
       wireListeners();
+
+      
+// Normalize country fields on blur (helps beginners)
+const wineCountryEl = document.getElementById("wine-country");
+if (wineCountryEl) {
+  wineCountryEl.addEventListener("blur", () => {
+    const norm = normalizeCountryInput(wineCountryEl.value);
+    if (norm) wineCountryEl.value = norm;
+  });
+}
+const guessCountryEl = document.getElementById("tasting-guess-country");
+if (guessCountryEl) {
+  guessCountryEl.addEventListener("blur", () => {
+    const norm = normalizeCountryInput(guessCountryEl.value);
+    if (norm) guessCountryEl.value = norm;
+  });
+}
 
       // 4) Default view
       window.showSettings();
