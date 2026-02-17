@@ -1041,7 +1041,7 @@ try {
     
     function analyzeWineTastes() {
       // Aggregate subjective attributes per wine and pick "most common" winners
-      const analysis = { sweetest:null, driest:null, fullest:null, lightest:null, mostAroma (how strong is the smell?):null, leastAroma (how strong is the smell?):null, mostAcidity (freshness):null, leastAcidity (freshness):null };
+      const analysis = { sweetest:null, driest:null, fullest:null, lightest:null, mostAroma:null, leastAroma:null, mostAcidity:null, leastAcidity:null };
       const perWine = {};
       (wines||[]).filter(w=>w.type==='wine').forEach(w=>{
         perWine[w.wine_number] = { sweetness:[], body:[], aroma:[], acidity:[] };
