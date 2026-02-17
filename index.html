@@ -8,26 +8,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     html, body { height: 100%; width: 100%; }
-:root{
-      --wine-900:#2a0a15;
-      --wine-700:#6d1231;
-      --wine-600:#7a1637;
-      --cream:#f4efe7;
-      --ink:#111827;
-    }
     .font-display { font-family: 'Playfair Display', Georgia, serif; }
     .font-body { font-family: 'Lato', system-ui, sans-serif; }
-    .wine-gradient { background: radial-gradient(circle at 20% 10%, rgba(255,255,255,0.10), transparent 40%), linear-gradient(135deg, #6d1231 0%, #2a0a15 100%); }
-    .card-light { background: rgba(244,239,231,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.22); }
+    .wine-gradient { background: linear-gradient(135deg, #8b1e3f 0%, #4a0f25 100%); }
+    .card-light { background: #f4efe7; }
     .accent-deep { color: #8b1e3f; }
     .accent-light { color: #f4efe7; }
-    .btn-primary { background: #6d1231; color: #f4efe7; min-height: 48px; transition: transform .15s, background .2s, box-shadow .2s; box-shadow: 0 10px 25px rgba(0,0,0,0.18); }
-    .btn-primary:hover { background: #7a1637; transform: translateY(-1px); }
-    .btn-primary:active { background: #5a0f28; transform: translateY(0); }
-    .nav-btn { min-height: 44px; font-size: 14px; transition: transform .15s, background .2s, box-shadow .2s; -webkit-tap-highlight-color: transparent; box-shadow: 0 10px 25px rgba(0,0,0,0.14); }
-    .option-btn { border: 1px solid rgba(0,0,0,0.12); transition: transform .12s, background .2s, color .2s, border-color .2s, box-shadow .2s; min-height: 44px; font-size: 16px; font-weight: 500; padding: 12px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; background: rgba(255,255,255,0.9); color: #1f2937; box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
-    .option-btn:hover { transform: translateY(-1px); }
-    .option-btn.selected { background: #6d1231; color: #f4efe7; border-color: #6d1231; }
+    .btn-primary { background: #8b1e3f; color: #f4efe7; min-height: 48px; transition: all .2s; }
+    .btn-primary:active { background: #6a1630; }
+    .nav-btn { min-height: 44px; font-size: 14px; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+    .option-btn { border: 2px solid #ddd; transition: all .2s; min-height: 44px; font-size: 16px; font-weight: 500; padding: 12px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; background: white; color: #333; }
+    .option-btn.selected { background: #8b1e3f; color: #f4efe7; border-color: #8b1e3f; }
     input, textarea, select { font-size: 16px; -webkit-appearance: none; appearance: none; border-radius: 8px; }
     input[type="text"], input[type="number"], textarea, select { padding: 12px 14px; min-height: 44px; }
     .star-rating { display: flex; gap: 4px; font-size: 24px; }
@@ -36,23 +27,16 @@
     .podium-position { background: white; border-radius: 8px; padding: 16px; text-align: center; }
     @media (max-width: 640px) {
       .podium { grid-template-columns: 1fr; }
-      .nav-btn { min-height: 44px; font-size: 14px; transition: transform .15s, background .2s, box-shadow .2s; -webkit-tap-highlight-color: transparent; box-shadow: 0 10px 25px rgba(0,0,0,0.14); }
+      .nav-btn { font-size: 12px; padding: 0.5rem 0.5rem; }
     }
-  
-    .btn-primary:focus-visible, .nav-btn:focus-visible, .option-btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-      outline: 3px solid rgba(255,255,255,0.55);
-      outline-offset: 2px;
-    }
-    
   </style>
 </head>
 <body class="h-full font-body overflow-hidden">
   <div id="app" class="h-full w-full wine-gradient flex flex-col">
     <div class="flex-1 overflow-auto p-4 pb-20">
-      <header class="text-center mb-6 relative">
+      <header class="text-center mb-6">
         <h1 id="event-title" class="font-display text-3xl sm:text-4xl font-bold accent-light mb-2">🍷 Wine Tasting</h1>
         <p id="event-subtitle" class="text-white/80 text-sm"></p>
-        <a id="lang-switch" href="https://vinprovning.vercel.app/" class="absolute top-0 right-0 text-white/80 hover:text-white text-xs sm:text-sm underline decoration-dotted">Svenska</a>
       </header>
 
       <div class="flex justify-center gap-2 mb-6 flex-wrap max-w-6xl mx-auto">
@@ -66,7 +50,7 @@
       <div class="max-w-4xl mx-auto">
 
         <!-- SETTINGS -->
-        <div id="settings-section" class="card-light rounded-2xl shadow-xl p-6">
+        <div id="settings-section" class="card-light rounded-xl shadow-xl p-6">
           <h2 class="font-display text-2xl font-bold accent-deep mb-6">⚙️ Settings</h2>
 
           <div class="mb-8">
@@ -75,7 +59,7 @@
               <input id="event-name-input" type="text" class="border border-gray-300 rounded-lg" placeholder="Event name (shown as title)" />
               <button class="btn-primary rounded-lg font-semibold" onclick="saveEventName()">Save event name</button>
             </div>
-            <p class="text-xs text-gray-600 mt-2">Tip: share the link with <span class="font-mono">?event=mitt-event</span> for separate events.</p>
+            <p class="text-xs text-gray-600 mt-2">Tip: share the link with <span class="font-mono">?event=mitt-event</span> to create separate events.</p>
           </div>
 
           <hr class="my-8">
@@ -84,7 +68,7 @@
             <h3 class="font-display text-lg font-bold accent-deep mb-4">Participants</h3>
             <div id="participants-list" class="space-y-2 mb-4"></div>
             <form id="participant-form" class="flex gap-2" onsubmit="handleAddParticipant(event)">
-              <input type="text" id="participant-name" placeholder="Participant name" class="flex-1 border border-gray-300 rounded-lg" required />
+              <input type="text" id="participant-name" placeholder="Participantsns namn" class="flex-1 border border-gray-300 rounded-lg" required />
               <button type="submit" class="px-6 btn-primary rounded-lg font-semibold">+ Add</button>
             </form>
           </div>
@@ -95,10 +79,10 @@
             <h3 class="font-display text-lg font-bold accent-deep mb-4">Add wines</h3>
             <form id="wine-form" class="space-y-3" onsubmit="handleAddWine(event)">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <input type="number" id="wine-number" placeholder="Wine #" class="border border-gray-300 rounded-lg" required />
+                <input type="number" id="wine-number" placeholder="Wine number" class="border border-gray-300 rounded-lg" required />
                 <input type="text" id="wine-name" placeholder="Wine name" class="border border-gray-300 rounded-lg" required />
                 <input type="text" id="wine-grape" placeholder="Grape" class="border border-gray-300 rounded-lg" required />
-                <input type="number" id="wine-price" step="0.1" min="0" placeholder="Price (€)" class="border border-gray-300 rounded-lg" required />
+                <input type="number" id="wine-price" placeholder="Price (€)" class="border border-gray-300 rounded-lg"  step="0.1" required />
                 <input type="text" id="wine-country" placeholder="Country" class="border border-gray-300 rounded-lg" required />
               </div>
               <button type="submit" class="w-full btn-primary rounded-lg font-semibold">✓ Add wine</button>
@@ -116,7 +100,7 @@
               <button class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-semibold" onclick="toggleQuizEditor()">✏️ Edit questions</button>
             </div>
             <div id="quiz-editor-panel" class="hidden mt-3">
-            <p class="text-xs text-gray-600 mb-4">Create your own questions here. They are saved per event and sync live.</p>
+            <p class="text-xs text-gray-600 mb-4">You can create your own questions here. They are saved per event and synced live.</p>
             <div id="quiz-editor" class="space-y-3"></div>
             <div class="flex gap-2 mt-4">
               <button class="flex-1 btn-primary rounded-lg font-semibold" onclick="addEmptyQuestion()">+ New question</button>
@@ -131,14 +115,14 @@
           <div>
             <h3 class="font-display text-lg font-bold accent-deep mb-4">Reset data</h3>
             <div class="flex gap-2">
-              <button onclick="resetTastings()" class="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold py-2">Reset tasting</button>
+              <button onclick="resetTastings()" class="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold py-2">Reset tastings</button>
               <button onclick="resetQuiz()" class="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold py-2">Reset quiz</button>
             </div>
           </div>
         </div>
 
         <!-- TASTING -->
-        <div id="tasting-section" class="hidden card-light rounded-2xl shadow-xl p-6">
+        <div id="tasting-section" class="hidden card-light rounded-xl shadow-xl p-6">
           <h2 class="font-display text-2xl font-bold accent-deep mb-6">🍷 Tasting</h2>
           <div id="tasting-start" class="space-y-4">
             <p class="text-gray-700">Choose a participant and a wine to start tasting</p>
@@ -166,7 +150,7 @@
             </div>
             <div>
               <label class="block text-xs font-semibold accent-deep mb-2">Gissa Price (€)</label>
-              <input type="number" id="tasting-guess-price" step="0.1" min="0" placeholder="e.g. 12.5" class="w-full border border-gray-300 rounded-lg" required />
+              <input type="number" id="tasting-guess-price" placeholder="e.g. 12.5" class="w-full border border-gray-300 rounded-lg"  step="0.1" required />
             </div>
 
             <hr class="my-4">
@@ -231,7 +215,7 @@
         </div>
 
         <!-- QUIZ -->
-        <div id="quiz-section" class="hidden card-light rounded-2xl shadow-xl p-6">
+        <div id="quiz-section" class="hidden card-light rounded-xl shadow-xl p-6">
           <h2 class="font-display text-2xl font-bold accent-deep mb-6">🧠 Quiz</h2>
           <div id="quiz-start" class="space-y-4">
             <p class="text-gray-700">Choose a participant to start the quiz</p>
@@ -247,15 +231,15 @@
         </div>
 
         <!-- TASTING RESULTS -->
-        <div id="tasting-results-section" class="hidden card-light rounded-2xl shadow-xl p-6">
-          <h2 class="font-display text-2xl font-bold accent-deep mb-6">🍇 Tasting results</h2>
+        <div id="tasting-results-section" class="hidden card-light rounded-xl shadow-xl p-6">
+          <h2 class="font-display text-2xl font-bold accent-deep mb-6">🍇 Wine tasting results</h2>
           <div id="tasting-results-content" class="space-y-6"></div>
           <button onclick="toggleWineReveal(event)" class="w-full mt-8 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold py-3">🎭 Reveal wines</button>
           <div id="wine-reveal" class="hidden mt-6 space-y-3"></div>
         </div>
 
         <!-- QUIZ RESULTS -->
-        <div id="quiz-results-section" class="hidden card-light rounded-2xl shadow-xl p-6">
+        <div id="quiz-results-section" class="hidden card-light rounded-xl shadow-xl p-6">
           <h2 class="font-display text-2xl font-bold accent-deep mb-6">🏆 Quiz results</h2>
           <div id="quiz-results-content" class="space-y-6"></div>
         </div>
@@ -294,14 +278,14 @@
     document.getElementById("event-subtitle").textContent = `Event: ${EVENT_ID}`;
 
     const firebaseConfig = {
-  apiKey: "AIzaSyDmYU8t0-DSKHZlx6qbMBg0kaUVSqYfpu8",
-  authDomain: "winetasting-b44b0.firebaseapp.com",
-  projectId: "winetasting-b44b0",
-  storageBucket: "winetasting-b44b0.firebasestorage.app",
-  messagingSenderId: "181635666044",
-  appId: "1:181635666044:web:3c12a0b5eddeca6d98b9f9",
-  measurementId: "G-H7B9XB6G5K"
-};
+      apiKey: "AIzaSyDmYU8t0-DSKHZlx6qbMBg0kaUVSqYfpu8",
+      authDomain: "winetasting-b44b0.firebaseapp.com",
+      projectId: "winetasting-b44b0",
+      storageBucket: "winetasting-b44b0.firebasestorage.app",
+      messagingSenderId: "181635666044",
+      appId: "1:181635666044:web:3c12a0b5eddeca6d98b9f9",
+      measurementId: "G-H7B9XB6G5K"
+    };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -326,289 +310,94 @@
 
     const DEFAULT_QUESTIONS = [
   {
-    "id": 1,
-    "q": "1) Which country produces the most wine in the world?",
-    "opts": [
-      [
-        "1",
-        "Spain"
-      ],
-      [
-        "X",
-        "Italy"
-      ],
-      [
-        "2",
-        "France"
-      ]
-    ],
-    "correct": "X"
+    id: 1,
+    q: "1) Which country produces the most wine in the world?",
+    opts: [["1","Spain"],["X","Italy"],["2","France"]],
+    correct: "X"
   },
   {
-    "id": 2,
-    "q": "2) What is the main grape in red wine from Barolo?",
-    "opts": [
-      [
-        "1",
-        "Barbera"
-      ],
-      [
-        "X",
-        "Sangiovese"
-      ],
-      [
-        "2",
-        "Nebbiolo"
-      ]
-    ],
-    "correct": "2"
+    id: 2,
+    q: "2) What is the main grape in red wine from Barolo?",
+    opts: [["1","Barbera"],["X","Sangiovese"],["2","Nebbiolo"]],
+    correct: "2"
   },
   {
-    "id": 3,
-    "q": "3) What does “Sec” on a French label usually mean?",
-    "opts": [
-      [
-        "1",
-        "Dry"
-      ],
-      [
-        "X",
-        "Off-dry / semi-sweet"
-      ],
-      [
-        "2",
-        "Very sweet"
-      ]
-    ],
-    "correct": "1"
+    id: 3,
+    q: "3) What does \"Sec\" mean on a French wine label?",
+    opts: [["1","Dry"],["X","Off-dry / semi-sweet"],["2","Very sweet"]],
+    correct: "X"
   },
   {
-    "id": 4,
-    "q": "4) Which wine region is most famous for Riesling?",
-    "opts": [
-      [
-        "1",
-        "Rioja"
-      ],
-      [
-        "X",
-        "Bordeaux"
-      ],
-      [
-        "2",
-        "Mosel"
-      ]
-    ],
-    "correct": "2"
+    id: 4,
+    q: "4) Which wine region is most famous for Riesling?",
+    opts: [["1","Rioja"],["X","Bordeaux"],["2","Mosel"]],
+    correct: "2"
   },
   {
-    "id": 5,
-    "q": "5) What happens during malolactic fermentation?",
-    "opts": [
-      [
-        "1",
-        "Sugar is converted to alcohol"
-      ],
-      [
-        "X",
-        "Malic acid is converted to lactic acid"
-      ],
-      [
-        "2",
-        "Alcohol is converted to vinegar"
-      ]
-    ],
-    "correct": "X"
+    id: 5,
+    q: "5) What happens during malolactic fermentation?",
+    opts: [["1","Sugar turns into alcohol"],["X","Malic acid turns into lactic acid"],["2","Alcohol turns into vinegar"]],
+    correct: "X"
   },
   {
-    "id": 6,
-    "q": "6) Which country does the Malbec grape originally come from?",
-    "opts": [
-      [
-        "1",
-        "Argentina"
-      ],
-      [
-        "X",
-        "Chile"
-      ],
-      [
-        "2",
-        "France"
-      ]
-    ],
-    "correct": "2"
+    id: 6,
+    q: "6) Which country does Malbec originally come from?",
+    opts: [["1","Argentina"],["X","Chile"],["2","France"]],
+    correct: "2"
   },
   {
-    "id": 7,
-    "q": "7) What does oak ageing most often add to a wine’s profile?",
-    "opts": [
-      [
-        "1",
-        "More tannin, spice and vanilla notes"
-      ],
-      [
-        "X",
-        "Lower alcohol"
-      ],
-      [
-        "2",
-        "Less acidity"
-      ]
-    ],
-    "correct": "1"
+    id: 7,
+    q: "7) What does oak aging most often add to the flavour?",
+    opts: [["1","More tannin, spice and vanilla notes"],["X","Lower alcohol"],["2","Less acidity"]],
+    correct: "1"
   },
   {
-    "id": 8,
-    "q": "8) Cava is primarily produced in…",
-    "opts": [
-      [
-        "1",
-        "Italy"
-      ],
-      [
-        "X",
-        "Spain"
-      ],
-      [
-        "2",
-        "Portugal"
-      ]
-    ],
-    "correct": "X"
+    id: 8,
+    q: "8) Cava is produced mainly in…",
+    opts: [["1","Italy"],["X","Spain"],["2","Portugal"]],
+    correct: "X"
   },
   {
-    "id": 9,
-    "q": "9) Prosecco is made primarily from which grape?",
-    "opts": [
-      [
-        "1",
-        "Glera"
-      ],
-      [
-        "X",
-        "Trebbiano"
-      ],
-      [
-        "2",
-        "Pinot Grigio"
-      ]
-    ],
-    "correct": "1"
+    id: 9,
+    q: "9) Prosecco is made primarily from which grape?",
+    opts: [["1","Glera"],["X","Trebbiano"],["2","Pinot Grigio"]],
+    correct: "1"
   },
   {
-    "id": 10,
-    "q": "10) Which climate most often gives wines with higher acidity and lower alcohol?",
-    "opts": [
-      [
-        "1",
-        "Warm climate"
-      ],
-      [
-        "X",
-        "Cool climate"
-      ],
-      [
-        "2",
-        "Tropical climate"
-      ]
-    ],
-    "correct": "X"
+    id: 10,
+    q: "10) Which climate usually produces wines with higher acidity and lower alcohol?",
+    opts: [["1","Warm climate"],["X","Cool climate"],["2","Tropical climate"]],
+    correct: "X"
   },
   {
-    "id": 11,
-    "q": "11) What does “Grand Cru” mean in Burgundy?",
-    "opts": [
-      [
-        "1",
-        "A specific grape"
-      ],
-      [
-        "X",
-        "A storage method"
-      ],
-      [
-        "2",
-        "The highest vineyard classification"
-      ]
-    ],
-    "correct": "2"
+    id: 11,
+    q: "11) What does \"Grand Cru\" mean in Burgundy?",
+    opts: [["1","A special grape"],["X","A storage method"],["2","The highest vineyard classification"]],
+    correct: "2"
   },
   {
-    "id": 12,
-    "q": "12) What effect does long skin contact with red grapes usually have?",
-    "opts": [
-      [
-        "1",
-        "Darker color and more tannin"
-      ],
-      [
-        "X",
-        "Lighter color"
-      ],
-      [
-        "2",
-        "No difference at all"
-      ]
-    ],
-    "correct": "1"
+    id: 12,
+    q: "12) What does longer skin contact with dark grapes usually do?",
+    opts: [["1","Darker colour and more tannin"],["X","Lighter colour"],["2","No difference"]],
+    correct: "1"
   },
   {
-    "id": 13,
-    "q": "13) What is typical of Sauvignon Blanc from New Zealand?",
-    "opts": [
-      [
-        "1",
-        "Buttery, oaky notes"
-      ],
-      [
-        "X",
-        "High acidity and gooseberry/citrus aromas"
-      ],
-      [
-        "2",
-        "Very tannic"
-      ]
-    ],
-    "correct": "X"
+    id: 13,
+    q: "13) What is typical for Sauvignon Blanc from New Zealand?",
+    opts: [["1","Buttery, oaky notes"],["X","High acidity and gooseberry/citrus aromas"],["2","Very high tannin"]],
+    correct: "X"
   },
   {
-    "id": 14,
-    "q": "14) How is rosé most often made?",
-    "opts": [
-      [
-        "1",
-        "By blending red and white wine"
-      ],
-      [
-        "X",
-        "By long oak ageing"
-      ],
-      [
-        "2",
-        "By short skin contact with red grapes"
-      ]
-    ],
-    "correct": "2"
+    id: 14,
+    q: "14) How is rosé most often made?",
+    opts: [["1","By mixing red and white wine"],["X","Long oak aging"],["2","Short skin contact with dark grapes"]],
+    correct: "2"
   },
   {
-    "id": 15,
-    "q": "15) In Rioja (Spain), “Reserva” generally indicates…",
-    "opts": [
-      [
-        "1",
-        "Stricter ageing requirements than Crianza"
-      ],
-      [
-        "X",
-        "Organic wine"
-      ],
-      [
-        "2",
-        "Lower alcohol"
-      ]
-    ],
-    "correct": "1"
+    id: 15,
+    q: "15) What does \"Reserva\" generally mean in Rioja (Spain)?",
+    opts: [["1","Higher aging requirements than Crianza"],["X","Organic wine"],["2","Low alcohol"]],
+    correct: "1"
   }
 ];
 
@@ -617,31 +406,31 @@
     }
 
     function getPriceRange(priceStr) {
-      const price = parseFloat(priceStr);
-      if (isNaN(price)) return null;
+  const price = parseFloat(priceStr);
+  if (isNaN(price)) return null;
 
-      const ranges = [
-        [1, 5],
-        [5.1, 10],
-        [10.1, 15],
-        [15.1, 20],
-        [20.1, 25],
-        [25.1, 30],
-        [30.1, 35],
-        [35.1, 40],
-        [40.1, 45],
-        [45.1, 50],
-        [50.1, 55],
-        [55.1, 60],
-        [60.1, 65],
-      ];
+  const ranges = [
+    [1, 5],
+    [5.1, 10],
+    [10.1, 15],
+    [15.1, 20],
+    [20.1, 25],
+    [25.1, 30],
+    [30.1, 35],
+    [35.1, 40],
+    [40.1, 45],
+    [45.1, 50],
+    [50.1, 55],
+    [55.1, 60],
+    [60.1, 65]
+  ];
 
-      for (const [min, max] of ranges) {
-        if (price >= min && price <= max) return `${min}-${max}`;
-      }
-      if (price >= 65.1) return "65.1+";
-      return null;
-    }
+  for (const [min, max] of ranges) {
+    if (price >= min && price <= max) return `${min}-${max}`;
+  }
+  if (price >= 65.1) return "65.1+";
+  return null;
+}
 
     function showToast(msg, type = "success") {
       const toast = document.getElementById("toast");
@@ -736,7 +525,7 @@
 
     window.deleteItem = async function(id) {
       try { await deleteItemById(id); }
-      catch (e) { console.error(e); showToast("Could not delete (check Firestore Rules)", "error"); }
+      catch (e) { console.error(e); showToast("Couldn't delete (check Firestore Rules)", "error"); }
     };
 
     async function loadEventConfig() {
@@ -756,10 +545,10 @@
       try {
         await ensureSignedIn();
         await setDoc(metaDoc, { event_title: title }, { merge: true });
-        showToast("Eventnamn sparat!");
+        showToast("Event name saved!");
       } catch (e) {
         console.error(e);
-        showToast("Kunde inte spara eventnamn (kolla Rules)", "error");
+        showToast("Couldn't save event name (check Rules)", "error");
       }
     };
 
@@ -773,7 +562,7 @@
         showToast("Participants tillagd!");
       } catch (err) {
         console.error(err);
-        showToast("Could not add participant (check Firestore Rules)", "error");
+        showToast("Couldn't add participant (check Rules)", "error");
       }
     };
 
@@ -793,7 +582,7 @@
         showToast("Wine added!");
       } catch (err) {
         console.error(err);
-        showToast("Could not add wine (check Firestore Rules)", "error");
+        showToast("Couldn't add wine (check Rules)", "error");
       }
     };
 
@@ -813,7 +602,7 @@
       const wineList = wines.slice().sort((a,b) => (a.wine_number||0) - (b.wine_number||0));
       container.innerHTML = wineList.map(w => `
         <div class="flex justify-between items-center bg-white p-3 rounded-lg">
-          <span class="accent-deep font-semibold">Wine ${w.wine_number}</span>
+          <span class="accent-deep font-semibold">Vin ${w.wine_number}</span>
           <button class="text-red-600" onclick="deleteItem('${w.__id}')">✕</button>
         </div>
       `).join("");
@@ -831,16 +620,16 @@
 
       wineSelect.innerHTML =
         '<option value="">-- Select wine --</option>' +
-        wineList.map(w => `<option value="${w.__id}">Wine ${w.wine_number}</option>`).join("");
+        wineList.map(w => `<option value="${w.__id}">Vin ${w.wine_number}</option>`).join("");
     }
 
     window.startTasting = function() {
       const participantName = document.getElementById("tasting-participant").value;
       const wineId = document.getElementById("tasting-wine").value;
-      if (!participantName || !wineId) { showToast("Select a participant and a wine", "error"); return; }
+      if (!participantName || !wineId) { showToast("Select participant and wine", "error"); return; }
 
       const wine = wines.find(w => w.__id === wineId);
-      if (!wine) { showToast("Can't find that wine (refresh)", "error"); return; }
+      if (!wine) { showToast("Can't find the wine (reload)", "error"); return; }
 
       currentParticipant = participantName;
       currentWine = wine;
@@ -849,7 +638,7 @@
 
       document.getElementById("tasting-start").classList.add("hidden");
       document.getElementById("tasting-form").classList.remove("hidden");
-      document.getElementById("tasting-wine-title").textContent = `Wine ${wine.wine_number}`;
+      document.getElementById("tasting-wine-title").textContent = `Vin ${wine.wine_number}`;
       document.getElementById("tasting-guess-country").value = "";
       document.getElementById("tasting-guess-grape").value = "";
       document.getElementById("tasting-guess-price").value = "";
@@ -882,7 +671,7 @@
     window.submitTasting = async function() {
       if (!currentParticipant || !currentWine) return;
       if (!tastingData.aroma || !tastingData.body || !tastingData.acidity || !tastingData.sweetness || !tastingData.buy_again) {
-        showToast("Please fill in all fields", "error");
+        showToast("Fill in all fields", "error");
         return;
       }
       try {
@@ -905,7 +694,7 @@
         cancelTasting();
       } catch (e) {
         console.error(e);
-        showToast("Could not save tasting (check Rules)", "error");
+        showToast("Couldn't save tasting (check Rules)", "error");
       }
     };
 
@@ -994,7 +783,7 @@
         document.getElementById("quiz-participant").value = "";
       } catch (e) {
         console.error(e);
-        showToast("Could not save quiz (permissions/rules).", "error");
+        showToast("Couldn't save quiz (permissions/rules).", "error");
       }
     };
 
@@ -1020,7 +809,7 @@
 
       if (items.length > 3) {
         html += '<div class="bg-white rounded-lg overflow-hidden border border-gray-200">';
-        html += '<div class="grid grid-cols-12 gap-2 px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-50"><div class="col-span-2">Place</div><div class="col-span-7">Name</div><div class="col-span-3 text-right">Score</div></div>';
+        html += '<div class="grid grid-cols-12 gap-2 px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-50"><div class="col-span-2">Place</div><div class="col-span-7">Name</div><div class="col-span-3 text-right">Result</div></div>';
         items.slice(3).forEach((it, i) => {
           const place = i + 4;
           html += `<div class="grid grid-cols-12 gap-2 px-4 py-3 border-t">
@@ -1137,7 +926,7 @@ function renderTastingResultsPage() {
       ratedWines.forEach((w, i) => {
         const rank = i + 1;
         const medal = rank <= 3 ? medals[rank - 1] : '';
-        const respondedText = `${w.tasted_count} av ${w.total_participants} have submitted`;
+        const respondedText = `${w.tasted_count} av ${w.total_participants} har svarat`;
 
         html += `
           <div class="bg-white rounded-lg p-4 mb-3 border border-gray-200">
@@ -1145,7 +934,7 @@ function renderTastingResultsPage() {
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
                   <span class="text-lg">${medal || `<span class="inline-block w-7 text-center font-bold text-gray-500">${rank}</span>`}</span>
-                  <p class="font-bold accent-deep text-lg">Wine ${escapeHtml(String(w.wine_number))}</p>
+                  <p class="font-bold accent-deep text-lg">Vin ${escapeHtml(String(w.wine_number))}</p>
                 </div>
                 <button type="button"
                         class="mt-1 text-sm text-gray-700 underline decoration-dotted"
@@ -1181,7 +970,7 @@ function renderTastingResultsPage() {
               <div class="mt-2 space-y-1 text-gray-700">
                 ${w.grape ? `<p><span class="font-semibold">Grape:</span> ${escapeHtml(String(w.grape))}</p>` : ''}
                 ${w.country ? `<p><span class="font-semibold">Country:</span> ${escapeHtml(String(w.country))}</p>` : ''}
-                ${w.price}</p>` : ''}
+                ${w.price !== '' && w.price !== null && w.price !== undefined ? `<p><span class="font-semibold">Price:</span> €${Number(w.price).toFixed(1)}</p>` : ''}
               </div>
             </div>
           </div>
@@ -1195,14 +984,14 @@ function renderTastingResultsPage() {
       html += '<hr class="my-8">';
       html += '<div><h3 class="font-display text-xl font-bold accent-deep mb-4">📊 Wine analysis</h3>';
       html += '<div class="space-y-2">';
-      if (analysis.sweetest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍬 Sweetaste:</span> Wine ${escapeHtml(String(analysis.sweetest))}</div>`;
-      if (analysis.driest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍃 Dryaste:</span> Wine ${escapeHtml(String(analysis.driest))}</div>`;
-      if (analysis.fullest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">💪 Fullaste:</span> Wine ${escapeHtml(String(analysis.fullest))}</div>`;
-      if (analysis.lightest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">☁️ Lightaste:</span> Wine ${escapeHtml(String(analysis.lightest))}</div>`;
-      if (analysis.mostAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">👃 Most aroma:</span> Wine ${escapeHtml(String(analysis.mostAroma))}</div>`;
-      if (analysis.leastAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">😶 Least aroma:</span> Wine ${escapeHtml(String(analysis.leastAroma))}</div>`;
-      if (analysis.mostAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍋 Highst syra:</span> Wine ${escapeHtml(String(analysis.mostAcidity))}</div>`;
-      if (analysis.leastAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🥛 Lowest acidity:</span> Wine ${escapeHtml(String(analysis.leastAcidity))}</div>`;
+      if (analysis.sweetest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍬 Sweetaste:</span> Vin ${escapeHtml(String(analysis.sweetest))}</div>`;
+      if (analysis.driest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍃 Dryaste:</span> Vin ${escapeHtml(String(analysis.driest))}</div>`;
+      if (analysis.fullest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">💪 Fullaste:</span> Vin ${escapeHtml(String(analysis.fullest))}</div>`;
+      if (analysis.lightest) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">☁️ Lightaste:</span> Vin ${escapeHtml(String(analysis.lightest))}</div>`;
+      if (analysis.mostAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">👃 Most aroma:</span> Vin ${escapeHtml(String(analysis.mostAroma))}</div>`;
+      if (analysis.leastAroma) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">😶 Least aroma:</span> Vin ${escapeHtml(String(analysis.leastAroma))}</div>`;
+      if (analysis.mostAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🍋 Highst syra:</span> Vin ${escapeHtml(String(analysis.mostAcidity))}</div>`;
+      if (analysis.leastAcidity) html += `<div class="bg-white p-3 rounded-lg"><span class="font-semibold accent-deep">🥛 Lowest acidity:</span> Vin ${escapeHtml(String(analysis.leastAcidity))}</div>`;
       html += '</div></div>';
 
       container.innerHTML = html;
@@ -1226,7 +1015,7 @@ function renderTastingResultsPage() {
       const wineList = wines.slice().sort((a,b)=> (a.wine_number||0) - (b.wine_number||0));
       container.innerHTML = wineList.map(w => `
         <div class="bg-white p-4 rounded-lg border-l-4 border-purple-600">
-          <p class="font-bold accent-deep text-lg">Wine ${w.wine_number}: ${escapeHtml(w.wine_name)}</p>
+          <p class="font-bold accent-deep text-lg">Vin ${w.wine_number}: ${escapeHtml(w.wine_name)}</p>
           <div class="mt-2 space-y-1 text-sm text-gray-700">
             <p><span class="font-semibold">Grape:</span> ${escapeHtml(w.grape)}</p>
             <p><span class="font-semibold">Country:</span> ${escapeHtml(w.country)}</p>
@@ -1241,7 +1030,7 @@ function renderTastingResultsPage() {
       const btn = evt.target;
       if (reveal.classList.contains("hidden")) {
         reveal.classList.remove("hidden");
-        btn.textContent = "🎭 Hide wines";
+        btn.textContent = "🎭 Dölj Vinen";
         renderWineReveal();
       } else {
         reveal.classList.add("hidden");
@@ -1382,12 +1171,12 @@ window.saveQuizQuestions = async function() {
         await ensureSignedIn();
         const cleaned = normalizeEditorQuestions().filter(q => q.q.trim().length > 0).map((q, i) => ({ ...q, id: i+1 }));
         await setDoc(metaDoc, { quiz_questions: cleaned }, { merge: true });
-        showToast("Quiz saved!");
+        showToast("Quiz sparat!");
         const panel = document.getElementById("quiz-editor-panel");
         if (panel) panel.classList.add("hidden");
       } catch (e) {
         console.error(e);
-        showToast("Could not save quiz (permissions/rules).", "error");
+        showToast("Couldn't save quiz (permissions/rules).", "error");
       }
     };
 
@@ -1395,7 +1184,7 @@ window.saveQuizQuestions = async function() {
       if (!confirm("Are you sure? This will delete all tastings.")) return;
       (async () => {
         try { for (const t of tastings) await deleteItemById(t.id); showToast("Tastings reset!"); }
-        catch (e) { console.error(e); showToast("Could not reset (check Rules)", "error"); }
+        catch (e) { console.error(e); showToast("Kunde inte återställa (kolla Rules)", "error"); }
       })();
     };
 
@@ -1403,7 +1192,7 @@ window.saveQuizQuestions = async function() {
       if (!confirm("Are you sure? This will delete all quiz results.")) return;
       (async () => {
         try { for (const q of quizResults) await deleteItemById(q.id); showToast("Quiz results reset!"); }
-        catch (e) { console.error(e); showToast("Could not reset (check Rules)", "error"); }
+        catch (e) { console.error(e); showToast("Kunde inte återställa (kolla Rules)", "error"); }
       })();
     };
 
@@ -1417,6 +1206,7 @@ window.saveQuizQuestions = async function() {
         wines = docs.filter(x => x.type === 'wine').sort((a, b) => (a.wine_number || 0) - (b.wine_number || 0));
         tastings = docs.filter(x => x.type === 'tasting');
         quizResults = docs.filter(x => x.type === 'quiz');
+        
         // Håll UI i synk med realtidsdata oavsett vilken flik du är på
         if (!document.getElementById('settings-section').classList.contains('hidden')) {
           renderParticipants();
@@ -1459,7 +1249,7 @@ window.saveQuizQuestions = async function() {
             await signInAnonymously(auth);
           } catch (e) {
             console.error("Anonymous sign-in failed", e);
-            showToast("Can't sign in anonymously. Check Authorized domains and that Anonymous auth is enabled in Firebase Auth.", "error");
+            showToast("Can't sign in anonymously. Check Authorized domains + Anonymous enabled in Firebase Auth.", "error");
           }
         });
       });
