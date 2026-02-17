@@ -257,6 +257,7 @@
             <span class="text-xs text-gray-600">If buttons don’t work, check Firebase Auth + Firestore Rules.</span>
           </div>
 
+
           <div class="mb-8">
             <h3 class="font-display text-lg font-bold accent-deep mb-4">Event</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -456,27 +457,13 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    // --- Debug helpers (shows JS errors on screen) ---
-    window.__WT_DEBUG = { lastError: null };
+    // --- Visible error banner (so issues aren't hidden in Console) ---
     function showFatal(msg) {
       const el = document.getElementById('debug-banner');
-      if (el) {
-        el.classList.remove('hidden');
-        el.textContent = msg;
-      }
+      if (el) { el.classList.remove('hidden'); el.textContent = msg; }
     }
-    window.addEventListener('error', (e) => {
-      const m = String(e.message || e.error || e);
-      window.__WT_DEBUG.lastError = m;
-      showFatal('⚠️ App error: ' + m);
-      console.error('App error', e);
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-      const m = String(e.reason || e);
-      window.__WT_DEBUG.lastError = m;
-      showFatal('⚠️ Promise error: ' + m);
-      console.error('Unhandled promise rejection', e);
-    });
+    window.addEventListener('error', (e) => showFatal('⚠️ App error: ' + String(e.message || e.error || e)));
+    window.addEventListener('unhandledrejection', (e) => showFatal('⚠️ Promise error: ' + String(e.reason || e)));
     
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import {
@@ -806,7 +793,7 @@ function normalizeCountryInput(raw) {
 
     window.deleteItem = async function(id) {
       try { await deleteItemById(id); }
-      catch (e) { console.error(e); showToast(`Couldn\'t delete: ${e?.code || ""} ${e?.message || e}`, "error"); }
+      catch (e) { console.error(e); showToast("Couldn't delete (check Firestore Rules)", "error"); }
     };
 
     async function loadEventConfig() {
@@ -829,7 +816,7 @@ function normalizeCountryInput(raw) {
         showToast("Event name saved!");
       } catch (e) {
         console.error(e);
-        showToast(`Couldn\'t save event name: ${e?.code || ""} ${e?.message || e}`, "error");
+        showToast("Couldn't save event name (check Rules)", "error");
       }
     };
 
@@ -843,7 +830,7 @@ function normalizeCountryInput(raw) {
         showToast("Participants tillagd!");
       } catch (err) {
         console.error(err);
-        showToast(`Couldn\'t add participant: ${err?.code || ""} ${err?.message || err}`, "error");
+        showToast("Couldn't add participant (check Rules)", "error");
       }
     };
 
@@ -871,7 +858,7 @@ function normalizeCountryInput(raw) {
         showToast("Wine added!");
       } catch (err) {
         console.error(err);
-        showToast(`Couldn\'t add wine: ${err?.code || ""} ${err?.message || err}`, "error");
+        showToast("Couldn't add wine (check Rules)", "error");
       }
     };
 
@@ -990,7 +977,7 @@ try {
         cancelTasting();
       } catch (e) {
         console.error(e);
-        showToast(`Couldn\'t save tasting: ${e?.code || ""} ${e?.message || e}`, "error");
+        showToast("Couldn't save tasting (check Rules)", "error");
       }
     };
 
@@ -1079,7 +1066,7 @@ try {
         document.getElementById("quiz-participant").value = "";
       } catch (e) {
         console.error(e);
-        showToast(`Couldn\'t save quiz: ${e?.code || ""} ${e?.message || e}`, "error");
+        showToast("Couldn't save quiz (permissions/rules).", "error");
       }
     };
 
@@ -1472,7 +1459,7 @@ window.saveQuizQuestions = async function() {
         if (panel) panel.classList.add("hidden");
       } catch (e) {
         console.error(e);
-        showToast(`Couldn\'t save quiz: ${e?.code || ""} ${e?.message || e}`, "error");
+        showToast("Couldn't save quiz (permissions/rules).", "error");
       }
     };
 
@@ -1537,24 +1524,33 @@ window.saveQuizQuestions = async function() {
     }
 
     async function boot() {
-      // 1) Ensure we have an authenticated user (anonymous is fine)
-      await new Promise((resolve) => {
-        const unsub = onAuthStateChanged(auth, async (user) => {
-          if (user) { unsub(); return resolve(); }
-          try {
-            await signInAnonymously(auth);
-          } catch (e) {
-            console.error("Anonymous sign-in failed", e);
-            showToast(`Can\'t sign in anonymously: ${e?.code || ""} ${e?.message || e}. Check: Auth→Anonymous ON, and Authorized domains includes this Vercel domain.`, "error");
-          }
-        });
-      });
+  // 1) Ensure we have an authenticated user (anonymous is fine)
+  const pill = document.getElementById("connection-status");
+  try {
+    if (auth.currentUser) {
+      if (pill) pill.textContent = "✅ Connected";
+    } else {
+      await signInAnonymously(auth);
+      if (pill) pill.textContent = "✅ Connected";
+    }
+  } catch (e) {
+    console.error("Anonymous sign-in failed", e);
+    if (pill) pill.textContent = "❌ Not connected";
+    showFatal(`⚠️ Auth failed: ${e?.code || ""} ${e?.message || e} — Fix in Firebase: Authentication → Sign-in method → enable Anonymous. Authentication → Settings → Authorized domains → add winetasting-ten.vercel.app.`);
+    showToast(`Auth failed: ${e?.code || ""} ${e?.message || e}`, "error");
+    return;
+  }
 
-      // 2) Load event config (title, password flag, quiz questions)
+  onAuthStateChanged(auth, (u) => {
+    const p = document.getElementById("connection-status");
+    if (!p) return;
+    p.textContent = u ? "✅ Connected" : "⏳ Connecting…";
+  });
+
+  // 2) Load event config (title, password flag, quiz questions)
       await loadEventConfig();
 
       // 3) Start realtime listeners AFTER auth is ready (avoids permission-denied race)
-      document.getElementById("connection-status").textContent = "✅ Connected";
       wireListeners();
 
       
