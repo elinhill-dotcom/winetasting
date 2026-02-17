@@ -84,7 +84,7 @@
             <h3 class="font-display text-lg font-bold accent-deep mb-4">Participants</h3>
             <div id="participants-list" class="space-y-2 mb-4"></div>
             <form id="participant-form" class="flex gap-2" onsubmit="handleAddParticipant(event)">
-              <input type="text" id="participant-name" placeholder="Participantsns namn" class="flex-1 border border-gray-300 rounded-lg" required />
+              <input type="text" id="participant-name" placeholder="Participant name" class="flex-1 border border-gray-300 rounded-lg" required />
               <button type="submit" class="px-6 btn-primary rounded-lg font-semibold">+ Add</button>
             </form>
           </div>
@@ -294,14 +294,14 @@
     document.getElementById("event-subtitle").textContent = `Event: ${EVENT_ID}`;
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDmYU8t0-DSKHZlx6qbMBg0kaUVSqYfpu8",
-      authDomain: "winetasting-b44b0.firebaseapp.com",
-      projectId: "winetasting-b44b0",
-      storageBucket: "winetasting-b44b0.firebasestorage.app",
-      messagingSenderId: "181635666044",
-      appId: "1:181635666044:web:3c12a0b5eddeca6d98b9f9",
-      measurementId: "G-H7B9XB6G5K"
-    };
+  apiKey: "AIzaSyDmYU8t0-DSKHZlx6qbMBg0kaUVSqYfpu8",
+  authDomain: "winetasting-b44b0.firebaseapp.com",
+  projectId: "winetasting-b44b0",
+  storageBucket: "winetasting-b44b0.firebasestorage.app",
+  messagingSenderId: "181635666044",
+  appId: "1:181635666044:web:3c12a0b5eddeca6d98b9f9",
+  measurementId: "G-H7B9XB6G5K"
+};
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -1366,9 +1366,7 @@ function renderTastingResultsPage() {
       renderQuizEditor();
       showToast("Standardfrågor laddade (kom ihåg att trycka Save quiz)");
     };
-
-    
-    function toggleQuizEditor() {
+    window.toggleQuizEditor = function() {
       const panel = document.getElementById('quiz-editor-panel');
       if (!panel) return;
       panel.classList.toggle('hidden');
